@@ -1,0 +1,90 @@
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Runtime artifacts
+output/
+cache/
+models/
+logs/
+temp/
+*.log
+*.pkl
+
+# Media files (don't commit large binaries)
+*.wav
+*.mp3
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.wmv
+*.flac
+*.ogg
+*.m4a
+*.aac
+*.wma
+*.webm
+
+# Whisper / GGML model files
+*.bin
+*.ggml
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.ckpt
+*.h5
+*.pb
+*.tflite
+*.mlmodel
+
+# C/C++ compiled artifacts
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.dylib
+*.exe
+*.out
+*.app
+*.pdb
+*.ilk
+*.exp
+
+# Large library / download directories
+node_modules/
+.cache/
+.huggingface/
+huggingface_hub/
+torch_extensions/
+*.whl
+*.tar.gz
+*.zip
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

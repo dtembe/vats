@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vats"
+version = "1.0.0"
+description = "Versatile Audio Transcription & Summarization - High-performance local-first media processing"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Dan Tembe", email = "dtembe@yahoo.com"},
+]
+keywords = ["transcription", "summarization", "whisper", "diarization", "meeting", "audio", "video"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+
+dependencies = [
+    "ffmpeg-python>=0.2.0",
+    "numpy>=1.24.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "pydub>=0.25.1",
+    "openai-whisper>=20231117",
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "faster-whisper>=1.0.0",
+    "pyannote.audio>=3.1",
+    "transformers>=4.36.0",
+    "ollama>=0.1.0",
+    "openai>=1.14.0",
+    "httpx>=0.27.0",
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "tqdm>=4.66.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+docs = [
+    "pdfplumber>=0.10.0",
+    "python-docx>=1.0.0",
+]
+gpu = [
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+]
+all = [
+    "pdfplumber>=0.10.0",
+    "python-docx>=1.0.0",
+    "google-generativeai>=0.4.0",
+    "silero-vad>=5.0",
+    "librosa>=0.10.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.0",
+]
+
+[project.scripts]
+vats = "vats.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/dtembe/vats"
+Repository = "https://github.com/dtembe/vats"
+Issues = "https://github.com/dtembe/vats/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

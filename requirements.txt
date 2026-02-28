@@ -1,0 +1,26 @@
+# VATS core requirements
+# Install: pip install -r requirements.txt
+
+# Audio / transcription
+openai-whisper>=20231117
+faster-whisper>=1.0.0
+pydub>=0.25.1
+
+# Speaker diarization
+pyannote.audio>=3.1
+torch>=2.0
+
+# AI summarization (OpenAI SDK used by multiple providers)
+openai>=1.0
+
+# Document parsing
+pdfplumber>=0.10
+python-docx>=1.0
+
+# Utilities
+python-dotenv>=1.0
+requests>=2.31
+tqdm>=4.0
+
+# Audio processing
+ffmpeg-python>=0.2.0
