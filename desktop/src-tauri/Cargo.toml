@@ -1,0 +1,30 @@
+[package]
+name = "vats-desktop"
+version = "1.0.0"
+description = "VATS Desktop UI - Versatile Audio Transcription & Summarization"
+authors = ["VATS Team"]
+edition = "2021"
+
+[lib]
+name = "vats_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+dotenv = "0.15"
+which = "7"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
