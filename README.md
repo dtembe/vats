@@ -43,6 +43,14 @@ cp .env.example .env
 vats_start.bat
 ```
 
+**Desktop UI (cross-platform):**
+```bash
+cd desktop
+npm install
+npm run tauri:dev
+```
+See [desktop/README.md](desktop/README.md) for details.
+
 **CLI:**
 ```bash
 # Process a single file
@@ -120,6 +128,10 @@ vats/
 │   ├── vats_summary_prompt_extract_wisdom.txt
 │   ├── vats_summary_prompt_meeting.txt
 │   └── ...
+├── desktop/                 # Cross-platform Desktop UI (Tauri + React)
+│   ├── src/                 # React frontend
+│   ├── src-tauri/           # Rust backend
+│   └── README.md            # Desktop UI documentation
 └── src/vats/
     ├── __init__.py
     ├── __main__.py          # python -m vats support
