@@ -87,6 +87,7 @@ def load_config(env_path: Optional[Union[str, Path]] = None) -> Dict[str, Any]:
         # Ollama
         "ollama_api_url": os.getenv("OLLAMA_API_URL", "http://localhost:11434/v1"),
         "ollama_model": os.getenv("OLLAMA_MODEL", "llama3"),
+        "ollama_context_window": _int(os.getenv("OLLAMA_CONTEXT_WINDOW", "8192"), 8192),
         # Gemini
         "gemini_api_key": os.getenv("GEMINI_API_KEY", ""),
         "gemini_api_url": os.getenv("GEMINI_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/"),

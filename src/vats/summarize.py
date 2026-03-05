@@ -93,22 +93,77 @@ class OllamaSummarizer(SummarizerBase):
         self.max_tokens = max_tokens
         logger.info("OllamaSummarizer  model=%s  url=%s", self.model, self.api_url)
 
-    def _check_reachable(self) -> bool:
-        """Quick connectivity check before sending the full transcript."""
+    def _check_server_running(self) -> tuple:
+        """Check if the server is running and responding. Returns (is_running, error_message)."""
         base_url = self.api_url.replace("/v1", "")
+        # Try Ollama native endpoint
         try:
             resp = requests.get(f"{base_url}/api/tags", timeout=5)
-            return resp.status_code == 200
+            if resp.status_code == 200:
+                return True, ""
         except Exception:
-            return False
+            pass
+        # Try OpenAI-compatible endpoint (LM Studio)
+        try:
+            resp = requests.get(f"{self.api_url}/models", timeout=5)
+            if resp.status_code == 200:
+                return True, ""
+        except Exception:
+            pass
+        return False, f"Server not reachable at {self.api_url}. Start LM Studio or Ollama."
+
+    def _get_available_models(self) -> list:
+        """Get list of available models from the server."""
+        models = []
+        # Try OpenAI-compatible endpoint (LM Studio)
+        try:
+            resp = requests.get(f"{self.api_url}/models", timeout=5)
+            if resp.status_code == 200:
+                data = resp.json()
+                models = [m.get("id", m.get("name", "")) for m in data.get("data", data.get("models", []))]
+        except Exception:
+            pass
+        # Try Ollama native endpoint
+        if not models:
+            try:
+                base_url = self.api_url.replace("/v1", "")
+                resp = requests.get(f"{base_url}/api/tags", timeout=5)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    models = [m.get("name", "") for m in data.get("models", [])]
+            except Exception:
+                pass
+        return models
+
+    def _validate_model(self) -> tuple:
+        """Validate that the configured model is available. Returns (is_valid, error_message)."""
+        available = self._get_available_models()
+        if not available:
+            return False, f"No models found at {self.api_url}. Load a model in LM Studio."
+
+        # Check for exact or partial match
+        for m in available:
+            if m == self.model or m.startswith(f"{self.model}:") or self.model in m:
+                logger.info("Model validated: %s -> %s", self.model, m)
+                return True, ""
+
+        # Model not found - build helpful error
+        model_list = chr(10).join([f"  - {m}" for m in available])
+        err_msg = f"Model '{self.model}' not found.{chr(10)}Available models:{chr(10)}{model_list}{chr(10)}{chr(10)}Update OLLAMA_MODEL in .env or load the model in LM Studio."
+        return False, err_msg
 
     def generate_summary(self, transcript, prompt=None, prompt_file=None) -> str:
-        # Fail fast if Ollama isn't running
-        if not self._check_reachable():
-            msg = (f"Ollama is not reachable at {self.api_url}. "
-                   f"Start it with: ollama serve")
-            logger.error(msg)
-            return f"Error: {msg}"
+        # Check server is running
+        running, err = self._check_server_running()
+        if not running:
+            logger.error(err)
+            return f"Error: {err}"
+
+        # Validate model is available
+        valid, err = self._validate_model()
+        if not valid:
+            logger.error(err)
+            return f"Error: {err}"
 
         system_prompt = load_prompt(prompt, prompt_file)
         text = _extract_text(transcript)
