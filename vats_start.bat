@@ -15,10 +15,11 @@ echo    High-Performance Bulk Processing
 echo ========================================
 echo.
 
-REM Set the script directory
-set SCRIPT_DIR=%~dp0
-set VATS_CLI=%SCRIPT_DIR%src\vats\cli.py
-set VENV_DIR=%SCRIPT_DIR%.venv
+REM Set the script directory (strip trailing backslash to avoid quote escaping issues)
+set "SCRIPT_DIR=%~dp0"
+set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+set VATS_CLI=%SCRIPT_DIR%\src\vats\cli.py
+set VENV_DIR=%SCRIPT_DIR%\.venv
 
 REM Suppress harmless library warnings (torchcodec, pyannote, etc.)
 set PYTHONWARNINGS=ignore
